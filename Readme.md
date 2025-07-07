@@ -380,3 +380,76 @@ data:
 - Vulnerability scanning en pipeline
 
 ---
+
+## 4. Diagrama de Arquitectura
+
+### 4.1 Arquitectura de Alto Nivel
+
+El diagrama Mermaid incluido muestra la arquitectura completa con:
+
+**Capa de Presentación:**
+- Web Application (React/Angular)
+- Mobile Application (React Native/Flutter)
+- API Clients (terceros)
+
+**Capa de Gateway:**
+- Application Load Balancer
+- API Gateway Service
+- Rate limiting y autenticación
+
+**Capa de Servicios:**
+- 5 microservicios independientes
+- Service Mesh para comunicación
+- Sidecar proxies para seguridad
+
+**Capa de Datos:**
+- Bases de datos especializadas por servicio
+- Cache distribuido
+- Almacenamiento de archivos
+
+**Capa de Infraestructura:**
+- Kubernetes cluster gestionado
+- Servicios AWS gestionados
+- Monitoreo y observabilidad
+
+### 4.2 Flujos de Comunicación
+
+**Flujo de Autenticación:**
+1. Cliente → ALB → API Gateway
+2. API Gateway → Auth Service
+3. Auth Service → User Service (validación)
+4. Respuesta con JWT token
+
+**Flujo de Gestión de Proyectos:**
+1. Cliente autenticado → API Gateway
+2. Validación JWT en API Gateway
+3. Routing a Project Service
+4. Project Service → Database
+5. Respuesta con datos del proyecto
+
+**Flujo de Archivos:**
+1. Cliente → File Service
+2. File Service → S3 (almacenamiento)
+3. Metadata → File Database
+4. Respuesta con URL firmada
+
+### 4.3 Herramientas Integradas
+
+**Bases de Datos:**
+- **PostgreSQL (RDS)**: Datos transaccionales
+- **Redis (ElastiCache)**: Cache y sesiones
+- **S3**: Almacenamiento de archivos
+
+**Monitoreo:**
+- **CloudWatch**: Métricas y logs AWS
+- **Prometheus**: Métricas de Kubernetes
+- **Grafana**: Dashboards y visualización
+- **Jaeger**: Distributed tracing
+
+**Seguridad:**
+- **AWS IAM**: Control de acceso
+- **AWS WAF**: Protección web
+- **Service Mesh**: mTLS automático
+- **Network Policies**: Segmentación de red
+
+---
