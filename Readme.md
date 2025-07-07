@@ -453,3 +453,68 @@ El diagrama Mermaid incluido muestra la arquitectura completa con:
 - **Network Policies**: Segmentación de red
 
 ---
+
+## 5. Consideraciones de Seguridad
+
+### 5.1 Seguridad en Capas
+
+**Capa de Red:**
+- VPC con subnets privadas
+- Security Groups restrictivos
+- Network ACLs
+- WAF en ALB
+
+**Capa de Aplicación:**
+- JWT con rotación automática
+- Rate limiting por cliente
+- Input validation
+- HTTPS/TLS everywhere
+
+**Capa de Datos:**
+- Encryption at rest
+- Encryption in transit
+- Database credentials rotation
+- Backup encryption
+
+### 5.2 Compliance y Auditoria
+
+**Logging:**
+- Audit logs centralizados
+- Retention policies
+- Log analysis con CloudWatch Insights
+
+**Compliance:**
+- SOC 2 Type II ready
+- GDPR compliance
+- Data residency controls
+
+---
+
+## 6. Estimación de Costos
+
+### 6.1 Costos Mensuales Estimados (USD)
+
+**Compute:**
+- EKS Cluster: $75
+- EC2 Instances (t3.medium x 3): $95
+- ALB: $25
+
+**Storage:**
+- RDS PostgreSQL (db.t3.micro): $25
+- ElastiCache Redis: $15
+- S3 Storage (100GB): $3
+
+**Networking:**
+- Data Transfer: $10
+- NAT Gateway: $45
+
+**Total Estimado: ~$293/mes**
+
+### 6.2 Optimizaciones de Costo
+
+- Spot Instances para desarrollo
+- Reserved Instances para producción
+- S3 Intelligent Tiering
+- Auto-scaling para ajustar recursos
+
+---
