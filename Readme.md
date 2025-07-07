@@ -452,6 +452,9 @@ El diagrama Mermaid incluido muestra la arquitectura completa con:
 - **Service Mesh**: mTLS automático
 - **Network Policies**: Segmentación de red
 
+### 4.4 Diagrama:
+![Diagrama de Arquitectura](./images/diagrama.png)
+
 ---
 
 ## 5. Consideraciones de Seguridad
@@ -595,7 +598,7 @@ La arquitectura propuesta para ProManage ofrece:
 
 ## Referencias
 
-- Módulo 5 - Arquitectura y Escalabilidad del Bootcamp Fundamentos de DevOps, Talento Digital y Academia Adalid.
+- Módulo 5 - "Arquitectura y Escalabilidad2 del Bootcamp Fundamentos de DevOps, Talento Digital y Academia Adalid.
 - AWS Well-Architected Framework
 - Kubernetes Official Documentation
 - Microservices Patterns (Chris Richardson)
