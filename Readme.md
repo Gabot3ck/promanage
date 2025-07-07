@@ -124,3 +124,128 @@ La plataforma ProManage requiere los siguientes componentes funcionales:
 - **Mantenimiento**: Reduce overhead operacional
 
 ---
+
+## 2. Diseño de Infraestructura y Escalabilidad
+
+### 2.1 Estrategia de Autoescalado
+
+**Horizontal Pod Autoscaler (HPA):**
+```yaml
+apiVersion: autoscaling/v2
+kind: HorizontalPodAutoscaler
+spec:
+  scaleTargetRef:
+    apiVersion: apps/v1
+    kind: Deployment
+    name: project-service
+  minReplicas: 2
+  maxReplicas: 10
+  metrics:
+  - type: Resource
+    resource:
+      name: cpu
+      target:
+        type: Utilization
+        averageUtilization: 70
+  - type: Resource
+    resource:
+      name: memory
+      target:
+        type: Utilization
+        averageUtilization: 80
+```
+
+**Vertical Pod Autoscaler (VPA):**
+- Ajuste automático de requests/limits
+- Optimización de recursos por contenedor
+- Análisis histórico de uso
+
+**Cluster Autoscaler:**
+- Escalado automático de nodos EC2
+- Optimización de costos con Spot Instances
+- Balanceo entre zonas de disponibilidad
+
+### 2.2 Balanceo de Carga
+
+**Niveles de Balanceo:**
+
+1. **Application Load Balancer (L7)**
+   - Routing basado en path/host
+   - SSL/TLS termination
+   - Health checks avanzados
+
+2. **Ingress Controller (L7)**
+   - Routing interno en Kubernetes
+   - Rate limiting
+   - Autenticación en edge
+
+3. **Service Mesh (L4/L7)**
+   - Load balancing inteligente
+   - Circuit breaker
+   - Retry automático
+
+### 2.3 Resiliencia y Alta Disponibilidad
+
+**Estrategias Implementadas:**
+
+**Multi-AZ Deployment:**
+- Distribución en 3 zonas de disponibilidad
+- Replicación automática de datos
+- Failover automático
+
+**Circuit Breaker Pattern:**
+```yaml
+apiVersion: networking.istio.io/v1beta1
+kind: DestinationRule
+metadata:
+  name: project-service
+spec:
+  host: project-service
+  trafficPolicy:
+    outlierDetection:
+      consecutiveErrors: 3
+      interval: 30s
+      baseEjectionTime: 30s
+      maxEjectionPercent: 50
+```
+
+**Backup y Recuperación:**
+- RDS automated backups (35 días)
+- Point-in-time recovery
+- Cross-region replication para DR
+
+**Health Checks:**
+- Liveness probes: Detecta contenedores muertos
+- Readiness probes: Controla tráfico a pods
+- Startup probes: Maneja aplicaciones de inicio lento
+
+### 2.4 Justificación de Kubernetes
+
+**Ventajas Técnicas:**
+
+**Orquestación Nativa:**
+- Gestión automática del ciclo de vida
+- Self-healing capabilities
+- Declarative configuration
+
+**Service Discovery:**
+- DNS interno automático
+- Service mesh integration
+- Load balancing nativo
+
+**Rolling Updates:**
+- Zero-downtime deployments
+- Rollback automático en caso de fallo
+- Canary deployments
+
+**Resource Management:**
+- Scheduling inteligente
+- Resource quotas
+- QoS classes
+
+**Ecosystem Maduro:**
+- Integración con herramientas DevOps
+- Helm para package management
+- Operators para aplicaciones complejas
+
+---
