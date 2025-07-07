@@ -249,3 +249,134 @@ spec:
 - Operators para aplicaciones complejas
 
 ---
+
+## 3. Contenedorización y Orquestación
+
+### 3.1 Estrategia de Contenedorización
+
+**Docker como Estándar:**
+
+**Multi-stage Builds:**
+```dockerfile
+# Build stage
+FROM node:18-alpine AS builder
+WORKDIR /app
+COPY package*.json ./
+RUN npm ci --only=production
+
+# Production stage
+FROM node:18-alpine
+WORKDIR /app
+COPY --from=builder /app/node_modules ./node_modules
+COPY . .
+EXPOSE 8080
+USER node
+CMD ["node", "server.js"]
+```
+
+**Optimizaciones:**
+- Imágenes base Alpine para menor tamaño
+- Layer caching para builds rápidos
+- Non-root user para seguridad
+- Health checks integrados
+
+**Security Scanning:**
+- Análisis automático de vulnerabilidades
+- Políticas de seguridad en CI/CD
+- Imágenes firmadas digitalmente
+
+### 3.2 Orquestación con Kubernetes
+
+**Componentes Clave:**
+
+**Deployments:**
+```yaml
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: project-service
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: project-service
+  template:
+    metadata:
+      labels:
+        app: project-service
+    spec:
+      containers:
+      - name: project-service
+        image: promanage/project-service:v1.0.0
+        ports:
+        - containerPort: 8080
+        env:
+        - name: DB_HOST
+          valueFrom:
+            secretKeyRef:
+              name: db-secret
+              key: host
+        resources:
+          requests:
+            cpu: 100m
+            memory: 128Mi
+          limits:
+            cpu: 500m
+            memory: 512Mi
+        livenessProbe:
+          httpGet:
+            path: /health
+            port: 8080
+          initialDelaySeconds: 30
+          periodSeconds: 10
+        readinessProbe:
+          httpGet:
+            path: /ready
+            port: 8080
+          initialDelaySeconds: 5
+          periodSeconds: 5
+```
+
+**Services:**
+- ClusterIP para comunicación interna
+- NodePort para acceso externo de desarrollo
+- LoadBalancer para producción
+
+**ConfigMaps y Secrets:**
+- Gestión centralizada de configuración
+- Separación de secrets sensibles
+- Versionado de configuración
+
+**Persistent Volumes:**
+- Storage classes para diferentes tipos
+- Backup automático
+- Snapshot policies
+
+### 3.3 Registro de Contenedores
+
+**Amazon ECR como Solución:**
+
+**Ventajas:**
+- **Integración Nativa**: Seamless con EKS y otros servicios AWS
+- **Security Scanning**: Análisis automático con AWS Inspector
+- **Lifecycle Policies**: Gestión automática de imágenes antiguas
+- **IAM Integration**: Control granular de acceso
+- **Geo-replication**: Replicación cross-region automática
+
+**Configuración:**
+```yaml
+apiVersion: v1
+kind: Secret
+metadata:
+  name: ecr-secret
+type: kubernetes.io/dockerconfigjson
+data:
+  .dockerconfigjson: <base64-encoded-config>
+```
+
+**CI/CD Integration:**
+- Push automático en merge a main
+- Tagging semántico
+- Vulnerability scanning en pipeline
+
+---
