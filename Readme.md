@@ -3,7 +3,7 @@
 
 **Alumno:** Jesús Gabriel Castillo  
 **Fecha:** Julio 2025  
-**Programa:** Bootcamp DevOps  
+**Programa:** Bootcamp Fundamentos DevOps - Talento Digital y Adalid Chile.
 
 ---
 
@@ -591,3 +591,15 @@ La arquitectura propuesta para ProManage ofrece:
 3. **Automatización**: CI/CD y IaC desde el inicio
 4. **Documentación**: Mantener arquitectura documentada
 5. **Capacitación**: Equipo debe dominar Kubernetes y AWS
+
+
+## Referencias
+
+- Módulo 5 - Arquitectura y Escalabilidad del Bootcamp Fundamentos de DevOps, Talento Digital y Academia Adalid.
+- AWS Well-Architected Framework
+- Kubernetes Official Documentation
+- Microservices Patterns (Chris Richardson)
+- Building Microservices (Sam Newman)
+- Site Reliability Engineering (Google)
+
+---
